@@ -728,11 +728,11 @@ void render(void)
 	    extern void showFranciscoName(int x, int y);
 	    extern void showAnahiName(int x, int y);
 	    extern void showTheodoreName(int x, int y);
-	    extern void showArielleName(int x, int y);
+	    extern void ShowArielleName(int x, int y);
 	    showFranciscoName(100, gl.yres-100);
 	    showAnahiName(100, gl.yres-100);
 	    showTheodoreName(100, gl.yres-100);
-	    showArielleName(100, gl.yres-100);
+	    ShowArielleName(100, gl.yres-100);
 	    return;
 	}
 
