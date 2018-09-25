@@ -6,10 +6,9 @@
 extern void ShowTheodoreName(int x, int y)
 {
     Rect r;
-    unsigned int c = 0x00ffff44;
-    r.bot = gl.yres - 20;
+    r.bot = y - 20;
     r.left = 10;
     r.center = 0;
-    ggprint8b(&r, 16, c, "Theodore Barcelona");
+    ggprint8b(&r, 16, 0x00ffff44, "Theodore Barcelona");
 }
 
