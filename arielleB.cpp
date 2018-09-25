@@ -2,7 +2,7 @@
 //Arielle's game source code
 
 #include <iostream>
-#include "font.hi"
+#include "font.h"
 
 
 void ShowArielleName(int x, int y)
