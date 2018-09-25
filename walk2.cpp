@@ -934,6 +934,7 @@ void render(void)
 	ggprint8b(&r, 16, c, "-   slower");
 	ggprint8b(&r, 16, c, "right arrow -> walk right");
 	ggprint8b(&r, 16, c, "left arrow  <- walk left");
+	ggprint8b(&r, 16, c, "C    Credits");
 	ggprint8b(&r, 16, c, "frame: %i", gl.walkFrame);
 	if (gl.movie) {
 		screenCapture();
