@@ -11,7 +11,7 @@ void ShowArielleName(int x, int y)
 	r.bot = y - 160 ;
 	r.left = x + 210;
 	r.center = 0;
-	ggprint8b(&r, 16, 0x00ffff44, "Arielle Battle");
+	ggprint8b(&r, 25, 0x00ffff44, "Arielle Battle");
 }
 
 
