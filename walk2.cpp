@@ -102,6 +102,7 @@ public:
 	int xres, yres;
 	int movie, movieStep;
 	int walk;
+	int credits;
 	int walkFrame;
 	double delay;
 	Image *walkImage;
@@ -124,6 +125,7 @@ public:
 		xres=800;
 		yres=600;
 		walk=0;
+		credits =0;
 		walkFrame=0;
 		walkImage=NULL;
 		MakeVector(ball_pos, 520.0, 0, 0);
