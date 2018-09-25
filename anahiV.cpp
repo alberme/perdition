@@ -2,7 +2,7 @@
 #include "fonts.h"
 using namespace std;
 
-extern void showAnahiName()
+extern void showAnahiName(int x, int y)
 {
     Rect r;
     r.bot = y;
