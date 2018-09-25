@@ -719,6 +719,18 @@ void render(void)
 	//Clear the screen
 	glClearColor(0.1, 0.1, 0.1, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
+	if (gl.credits) {
+	    extern void showFranciscoName(int x, int y);
+	    extern void showAnahiName(int x, int y);
+	    extern void showTheodoreName(int x, int y);
+	    extern void showArielleName(int x, int y);
+	    showFranciscoName(100, gl.yres-100);
+	    showAnahiName(100, gl.yres-100);
+	    showTheodoreName(100, gl.yres-100);
+	    showArielleName(100, gl.yres-100);
+	    return;
+	}
+
 	float cx = gl.xres/2.0;
 	float cy = gl.yres/2.0;
 	//
