@@ -3,7 +3,7 @@
 #include <iostream>
 #include "fonts.h"
 
-extern void ShowTheodoreName(int x, int y)
+extern void showTheodoreName(int x, int y)
 {
     Rect r;
     r.bot = y - 20;
