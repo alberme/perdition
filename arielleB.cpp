@@ -7,6 +7,7 @@
 
 void ShowArielleName(int x, int y)
 {
+    	unsigned int c = 0x00ffff44;
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
