@@ -7,7 +7,7 @@
 
 void ShowArielleName(int x, int y)
 {
-    	rect r;
+    	Rect r;
 	r.bot = y - 20;
 	r.left = 10;
 	r.center = 0;
