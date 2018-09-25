@@ -9,6 +9,6 @@ extern void showTheodoreName(int x, int y)
     r.bot = y - 150;
     r.left = x + 280;
     r.center = 0;
-    ggprint8b(&r, 25, 0x00ffff44, "Theodore Barcelona");
+    ggprint8b(&r, 40, 0x00ffff44, "Theodore Barcelona");
 }
 
