@@ -1,3 +1,7 @@
+/* Author: Francisco Ulloa
+* Date Modified: 9/26/18
+*/
+
 #include "fonts.h"
 #include <iostream>
 
