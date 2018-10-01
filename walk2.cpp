@@ -1,11 +1,12 @@
 //3350
-//program: walk2.cpp
-//author:  Gordon Griesel
-//date:    summer 2017
-//         spring 2018
+//program: PERDITION.cpp
+//author:  GROUP 2
+//date:    fall 2018
+//
 //
 //Walk cycle using a sprite sheet.
 //images courtesy: http://games.ucla.edu/resource/walk-cycles/
+//framework courtesy: Gordon Giesel
 //
 //This program includes:
 //  multiple sprite-sheet animations
@@ -39,6 +40,8 @@ typedef Flt	Matrix[4][4];
 #define VecSub(a,b,c) (c)[0]=(a)[0]-(b)[0]; \
                       (c)[1]=(a)[1]-(b)[1]; \
                       (c)[2]=(a)[2]-(b)[2]
+#define SPACE_BAR 0x20
+
 //constants
 const float timeslice = 1.0f;
 const float gravity = -0.2f;
@@ -102,6 +105,7 @@ public:
 	int xres, yres;
 	int movie, movieStep;
 	int walk;
+	int jump;		//added for jump w/spacebar arielle
 	int credits;
 	int walkFrame;
 	double delay;
@@ -125,6 +129,7 @@ public:
 		xres=800;
 		yres=600;
 		walk=0;
+		jump = 0;		//added  for jump arielle
 		credits =0;
 		walkFrame=0;
 		walkImage=NULL;
@@ -213,7 +218,7 @@ public:
 	void setTitle() {
 		//Set the window title bar.
 		XMapWindow(dpy, win);
-		XStoreName(dpy, win, "3350 - Walk Cycle");
+		XStoreName(dpy, win, "3350 - PERDITION");
 	}
 	void setupScreenRes(const int w, const int h) {
 		gl.xres = w;
@@ -928,13 +933,14 @@ void render(void)
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
-	ggprint8b(&r, 16, c, "W   Walk cycle");
-	ggprint8b(&r, 16, c, "E   Explosion");
-	ggprint8b(&r, 16, c, "+   faster");
-	ggprint8b(&r, 16, c, "-   slower");
-	ggprint8b(&r, 16, c, "right arrow -> walk right");
-	ggprint8b(&r, 16, c, "left arrow  <- walk left");
-	ggprint8b(&r, 16, c, "C    Credits");
+	ggprint8b(&r, 16, c, "Spacebar	jump");
+	ggprint8b(&r, 16, c, "W   	Walk cycle");
+	ggprint8b(&r, 16, c, "D   	walk right");
+	ggprint8b(&r, 16, c, "A   	walk left");
+	ggprint8b(&r, 16, c, "E   	Explosion");
+	ggprint8b(&r, 16, c, "+   	faster");
+	ggprint8b(&r, 16, c, "-   	slower");
+	ggprint8b(&r, 16, c, "C    	Credits");
 	ggprint8b(&r, 16, c, "frame: %i", gl.walkFrame);
 	if (gl.movie) {
 		screenCapture();
