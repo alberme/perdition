@@ -25,10 +25,10 @@ void showTheodorePicture(int x, int y, GLuint texid)
     glTranslatef(fx, fy, 0);
     glBindTexture(GL_TEXTURE_2D, texid);
     glBegin(GL_QUADS);
-         glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
-         glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
-         glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
-         glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
+         glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid,-wid);
+         glTexCoord2f(1.0f, 0.0f); glVertex2i(-wid, wid);
+         glTexCoord2f(1.0f, 1.0f); glVertex2i( wid, wid);
+         glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
          glEnd();
          glPopMatrix();
 }
