@@ -1,4 +1,5 @@
 //Theodore Barcelona
+//Updated: 10/2/18
 //Theo's game source code
 #include <math.h>
 #include <GL/glx.h>
@@ -18,8 +19,8 @@ void showTheodorePicture(int x, int y, GLuint texid)
     //show picture
     float fx = (float)x;
     float fy = (float)y;
-
     glColor3ub(255, 255, 255);
+    
     int wid=40;
     glPushMatrix();
     glTranslatef(fx, fy, 0);
