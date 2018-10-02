@@ -763,7 +763,7 @@ void render(void)
 	    extern void showTinaPicture(int x, int y, GLuint texid);
 	    extern void showFranciscoPicture(int x, int y, GLuint texid);
 	    extern void showTheodorePicture(int x, int y, GLuint texid);
-	    extern void showAriellePicture(int x, int y, GLuint texid);
+	    extern void showAriellePic(int x, int y, GLuint texid);
 	    showFranciscoName(100, gl.yres-100);
 	    showAnahiName(100, gl.yres-100);
 	    showTheodoreName(100, gl.yres-100);
@@ -772,7 +772,7 @@ void render(void)
 	    showTinaPicture(250, gl.yres-100, gl.tinaTexture);
 	    showFranciscoPicture(250, gl.yres-100, gl.dogTexture);
 	    showTheodorePicture(250, gl.yres-100, gl.mariogm734Texture);
-	    showAriellePicture(250, gl.yres-100, gl.animeTexture);
+	    showAriellePic(250, gl.yres-100, gl.animeTexture);
 
 	//    glColor3ub(255, 255, 255);
 	//
