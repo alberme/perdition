@@ -350,7 +350,7 @@ Image img[7] = {
 "./images/tina.png",
 "./images/mariogm734.png",
 "./images/anime.png",
-"images/anime.png"};
+"./images/dog.png"};
 
 
 int main(void)
@@ -410,17 +410,63 @@ void initOpengl(void)
 	//-------------------------------------------------------------------------
    	//tina texture
 	//
-	int wid = img[3].width;
-	int hgt = img[3].height;
+	int w_tina = img[3].width;
+	int h_tina  = img[3].height;
 	//
 	glBindTexture(GL_TEXTURE_2D, gl.tinaTexture);
 	//
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, wid, hgt, 0,
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w_tina, h_tina, 0,
 		GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
 	//-------------------------------------------------------------------------
 	//
+        glGenTextures(1, &gl.mariogm734Texture);
+        //-------------------------------------------------------------------------
+        //mario texture
+        //
+        int w_mario = img[4].width;
+        int h_mario = img[4].height;
+        //
+        glBindTexture(GL_TEXTURE_2D, gl.mariogm734Texture);
+        //
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, w_mario, h_mario, 0,
+                GL_RGB, GL_UNSIGNED_BYTE, img[4].data);
+        //-------------------------------------------------------------------------
+        //
+  	glGenTextures(1, &gl.animeTexture);
+        //-------------------------------------------------------------------------
+        //tina texture
+        //
+        int w_anime = img[5].width;
+        int h_anime = img[5].height;
+        //
+        glBindTexture(GL_TEXTURE_2D, gl.animeTexture);
+        //
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, w_anime, h_anime, 0,
+                GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
+        //-------------------------------------------------------------------------
+        //
+  	glGenTextures(1, &gl.dogTexture);
+        //-------------------------------------------------------------------------
+        //dog texture
+        //
+        int w_dog = img[6].width;
+        int h_dog = img[6].height;
+        //
+        glBindTexture(GL_TEXTURE_2D, gl.dogTexture);
+        //
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, w_dog, h_dog, 0,
+                GL_RGB, GL_UNSIGNED_BYTE, img[6].data);
+        //-------------------------------------------------------------------------
+        //
+
 
 	glViewport(0, 0, gl.xres, gl.yres);
 	//Initialize matrices
@@ -770,25 +816,9 @@ void render(void)
 	    ShowArielleName(100, gl.yres-100);
 
 	    showTinaPicture(250, gl.yres-100, gl.tinaTexture);
-	    showFranciscoPicture(250, gl.yres-100, gl.dogTexture);
-	    showTheodorePicture(250, gl.yres-100, gl.mariogm734Texture);
-	    showAriellePic(250, gl.yres-100, gl.animeTexture);
-
-	//    glColor3ub(255, 255, 255);
-	//
-	//    int wid = 40;
-	//    glPushMatrix();
-	//    glTranslatef(200, 200, 0);
-	//    glBindTexture(GL_TEXTURE_2D, gl.tinaTexture);
-	//    glBegin(GL_QUADS);
-
-	//    glTexCoord2f(0.0f, 0.0f); glVertex2f(-wid,  wid);
-	//    glTexCoord2f(1.0f, 0.0f); glVertex2f( wid,  wid);
-	//    glTexCoord2f(1.0f, 1.0f); glVertex2f( wid, -wid);
-	//    glTexCoord2f(0.0f, 1.0f); glVertex2f(-wid, -wid);
-
-	//    glEnd();
-	//    glPopMatrix();
+	    showFranciscoPicture(250, gl.yres-200, gl.dogTexture);
+	    showTheodorePicture(250, gl.yres-300, gl.mariogm734Texture);
+	    showAriellePic(250, gl.yres-400, gl.animeTexture);
 
 	    return;
 	}
