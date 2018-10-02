@@ -112,6 +112,7 @@ public:
 	Image *walkImage;
 	GLuint walkTexture;
 	Vec box[20];
+	GLuint tinaTexture;
 	Sprite exp;
 	Sprite exp44;
 	Vec ball_pos;
@@ -150,6 +151,7 @@ public:
 			box[i][2] = 0.0;
 		}
 		memset(keys, 0, 65536);
+		//
 	}
 } gl;
 
@@ -338,10 +340,11 @@ public:
 			unlink(ppmname);
 	}
 };
-Image img[3] = {
+Image img[4] = {
 "./images/walk.gif",
 "./images/exp.png",
-"./images/exp44.png" };
+"./images/exp44.png",
+"./images/tina.png"};
 
 
 int main(void)
@@ -397,6 +400,22 @@ unsigned char *buildAlphaData(Image *img)
 void initOpengl(void)
 {
 	//OpenGL initialization
+	glGenTextures(1, &gl.tinaTexture);
+	//-------------------------------------------------------------------------
+   	//tina texture
+	//
+	int wid = img[3].width;
+	int hgt = img[3].height;
+	//
+	glBindTexture(GL_TEXTURE_2D, gl.tinaTexture);
+	//
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, wid, hgt, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
+	//-------------------------------------------------------------------------
+	//
+
 	glViewport(0, 0, gl.xres, gl.yres);
 	//Initialize matrices
 	glMatrixMode(GL_PROJECTION); glLoadIdentity();
@@ -734,10 +753,30 @@ void render(void)
 	    extern void showAnahiName(int x, int y);
 	    extern void showTheodoreName(int x, int y);
 	    extern void ShowArielleName(int x, int y);
+	    extern void showTinaImage(int x, int y, GLuint texid);
 	    showFranciscoName(100, gl.yres-100);
 	    showAnahiName(100, gl.yres-100);
 	    showTheodoreName(100, gl.yres-100);
 	    ShowArielleName(100, gl.yres-100);
+
+	    showTinaImage(250, gl.yres-100, gl.tinaTexture);
+
+	//    glColor3ub(255, 255, 255);
+	//
+	//    int wid = 40;
+	//    glPushMatrix();
+	//    glTranslatef(200, 200, 0);
+	//    glBindTexture(GL_TEXTURE_2D, gl.tinaTexture);
+	//    glBegin(GL_QUADS);
+
+	//    glTexCoord2f(0.0f, 0.0f); glVertex2f(-wid,  wid);
+	//    glTexCoord2f(1.0f, 0.0f); glVertex2f( wid,  wid);
+	//    glTexCoord2f(1.0f, 1.0f); glVertex2f( wid, -wid);
+	//    glTexCoord2f(0.0f, 1.0f); glVertex2f(-wid, -wid);
+
+	//    glEnd();
+	//    glPopMatrix();
+
 	    return;
 	}
 
