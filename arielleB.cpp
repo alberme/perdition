@@ -20,7 +20,7 @@ void showAriellePic(int x, int y, GLuint texid)
 	glColor3ub(225, 255, 255);
 	int wid = 40;
 	glPushMatrix();
-	glTranslated(200, 200, 0);
+	glTranslated(x, y, 0);
 	glBindTexture(GL_TEXTURE_2D, texid);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid, -wid);
