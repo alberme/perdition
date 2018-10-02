@@ -1,3 +1,5 @@
+// authour: Anahi Vargas
+// date: 10/2/2018
 #include "fonts.h"
 #include <GL/glx.h>
 using namespace std;
