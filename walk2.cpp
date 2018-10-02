@@ -111,8 +111,11 @@ public:
 	double delay;
 	Image *walkImage;
 	GLuint walkTexture;
-	Vec box[20];
+	GLuint mariogm734Texture;
 	GLuint tinaTexture;
+	GLuint animeTexture;
+	GLuint dogTexture;
+	Vec box[20];
 	Sprite exp;
 	Sprite exp44;
 	Vec ball_pos;
@@ -340,11 +343,14 @@ public:
 			unlink(ppmname);
 	}
 };
-Image img[4] = {
+Image img[7] = {
 "./images/walk.gif",
 "./images/exp.png",
 "./images/exp44.png",
-"./images/tina.png"};
+"./images/tina.png",
+"./images/mariogm734.png",
+"./images/anime.png",
+"images/anime.png"};
 
 
 int main(void)
@@ -754,19 +760,19 @@ void render(void)
 	    extern void showTheodoreName(int x, int y);
 	    extern void ShowArielleName(int x, int y);
 	    //displays images
-	    extern void showTinaImage(int x, int y, GLuint texid);
-	    extern void showTinaImage(int x, int y, GLuint texid);
-	    extern void showTinaImage(int x, int y, GLuint texid);
-	    extern void showTinaImage(int x, int y, GLuint texid);
+	    extern void showTinaPicture(int x, int y, GLuint texid);
+	    extern void showFranciscoPicture(int x, int y, GLuint texid);
+	    extern void showTheodorePicture(int x, int y, GLuint texid);
+	    extern void showAriellePicture(int x, int y, GLuint texid);
 	    showFranciscoName(100, gl.yres-100);
 	    showAnahiName(100, gl.yres-100);
 	    showTheodoreName(100, gl.yres-100);
 	    ShowArielleName(100, gl.yres-100);
 
 	    showTinaPicture(250, gl.yres-100, gl.tinaTexture);
-	    showPictureFrancisco(250, gl.yres-100, gl.tinaTexture);
-	    showTheodorePicture(250, gl.yres-100, gl.tinaTexture);
-	    showAriellePicture(250, gl.yres-100, gl.tinaTexture);
+	    showFranciscoPicture(250, gl.yres-100, gl.dogTexture);
+	    showTheodorePicture(250, gl.yres-100, gl.mariogm734Texture);
+	    showAriellePicture(250, gl.yres-100, gl.animeTexture);
 
 	//    glColor3ub(255, 255, 255);
 	//
