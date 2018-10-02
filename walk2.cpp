@@ -753,13 +753,20 @@ void render(void)
 	    extern void showAnahiName(int x, int y);
 	    extern void showTheodoreName(int x, int y);
 	    extern void ShowArielleName(int x, int y);
+	    //displays images
+	    extern void showTinaImage(int x, int y, GLuint texid);
+	    extern void showTinaImage(int x, int y, GLuint texid);
+	    extern void showTinaImage(int x, int y, GLuint texid);
 	    extern void showTinaImage(int x, int y, GLuint texid);
 	    showFranciscoName(100, gl.yres-100);
 	    showAnahiName(100, gl.yres-100);
 	    showTheodoreName(100, gl.yres-100);
 	    ShowArielleName(100, gl.yres-100);
 
-	    showTinaImage(250, gl.yres-100, gl.tinaTexture);
+	    showTinaPicture(250, gl.yres-100, gl.tinaTexture);
+	    showPictureFrancisco(250, gl.yres-100, gl.tinaTexture);
+	    showTheodorePicture(250, gl.yres-100, gl.tinaTexture);
+	    showAriellePicture(250, gl.yres-100, gl.tinaTexture);
 
 	//    glColor3ub(255, 255, 255);
 	//
