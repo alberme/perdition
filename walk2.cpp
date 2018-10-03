@@ -807,15 +807,15 @@ void render(void)
 	    extern void showFranciscoPicture(int x, int y, GLuint texid);
 	    extern void showTheodorePicture(int x, int y, GLuint texid);
 	    extern void showAriellePic(int x, int y, GLuint texid);
-	    showFranciscoName(100, gl.yres-140);
-	    showAnahiName(100, gl.yres+120);
-	    showTheodoreName(100, gl.yres-90);
-	    ShowArielleName(100, gl.yres-180);
+	    showFranciscoName(100, gl.yres-155);
+	    showAnahiName(100, gl.yres-175);
+	    showTheodoreName(100, gl.yres-105);
+	    ShowArielleName(100, gl.yres-135);
 
-	    showAnahiPicture(250, gl.yres-550, gl.tinaTexture);
-	    showFranciscoPicture(250, gl.yres-400, gl.dogTexture);
+	    showAnahiPicture(250, gl.yres-475, gl.tinaTexture);
+	    showFranciscoPicture(250, gl.yres-350, gl.dogTexture);
 	    showTheodorePicture(250, gl.yres-100, gl.mariogm734Texture);
-	    showAriellePic(250, gl.yres-250, gl.animeTexture);
+	    showAriellePic(250, gl.yres-220, gl.animeTexture);
 
 	    return;
 	}
