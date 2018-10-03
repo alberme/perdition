@@ -1,10 +1,10 @@
 //Arielle Battle
 //Arielle's game source code
+//Description: my source code contains the function for showing my name and 
+//	       my picture in the main walk2.cpp file
 
-#include <iostream>
 #include "fonts.h"
 #include <GL/glx.h>
-#include <math.h>
 
 void ShowArielleName(int x, int y)
 {
