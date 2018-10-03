@@ -1,4 +1,4 @@
-// authour: Anahi Vargas
+// modified by: Anahi Vargas
 // date: 10/2/2018
 #include "fonts.h"
 #include <GL/glx.h>
@@ -15,12 +15,11 @@ extern void showAnahiName(int x, int y)
 }
 void showTinaPicture(int x, int y, GLuint texid)
 {
-    //show Tina image
     float fx = (float)x;
     float fy  = (float)y;
-    glColor3ub(255, 255, 255);
-
     int wid = 40;
+ 
+    glColor3ub(255, 255, 255);
     glPushMatrix();
     glTranslatef(fx, fy, 0);
     glBindTexture(GL_TEXTURE_2D, texid);
