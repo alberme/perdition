@@ -1,22 +1,23 @@
 //Theodore Barcelona
 //Updated: 10/2/18
 //Theo's game source code
+//Credits Function: show name & picture
 #include <math.h>
 #include <GL/glx.h>
 #include "fonts.h"
 
 extern void showTheodoreName(int x, int y)
 {
+    //show name and position
     Rect r;
     r.bot = y - 150;
     r.left = x + 280;
     r.center = 1;
     ggprint8b(&r, 40, 0x00ffff44, "Theodore Barcelona");
 }
-
 void showTheodorePicture(int x, int y, GLuint texid)
 {
-    //show picture
+    //show picture and position
     float fx = (float)x;
     float fy = (float)y;
     glColor3ub(255, 255, 255);
@@ -33,4 +34,3 @@ void showTheodorePicture(int x, int y, GLuint texid)
          glEnd();
          glPopMatrix();
 }
-
