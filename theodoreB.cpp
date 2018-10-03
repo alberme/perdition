@@ -1,7 +1,7 @@
-//Theodore Barcelona
+//Credits Function: show name & picture
+//Modified by: Theodore Barcelona
 //Updated: 10/2/18
 //Theo's game source code
-//Credits Function: show name & picture
 #include <math.h>
 #include <GL/glx.h>
 #include "fonts.h"
