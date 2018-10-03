@@ -7,7 +7,7 @@ using namespace std;
 extern void showAnahiName(int x, int y)
 {
     Rect r;
-    r.bot = y - 210;
+    r.bot = y - 300;
     r.left = x + 280;
     r.center = 1;
     ggprint8b(&r, 40, 0x00ffff44, "Anahi Vargas");
