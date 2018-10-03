@@ -2,7 +2,6 @@
 //Modified by: Theodore Barcelona
 //Updated: 10/2/18
 //Theo's game source code
-#include <math.h>
 #include <GL/glx.h>
 #include "fonts.h"
 
