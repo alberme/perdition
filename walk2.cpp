@@ -803,7 +803,7 @@ void render(void)
 	    extern void showTheodoreName(int x, int y);
 	    extern void ShowArielleName(int x, int y);
 	    //displays images
-	    extern void showTinaPicture(int x, int y, GLuint texid);
+	    extern void showAnahiPicture(int x, int y, GLuint texid);
 	    extern void showFranciscoPicture(int x, int y, GLuint texid);
 	    extern void showTheodorePicture(int x, int y, GLuint texid);
 	    extern void showAriellePic(int x, int y, GLuint texid);
@@ -812,7 +812,7 @@ void render(void)
 	    showTheodoreName(100, gl.yres-90);
 	    ShowArielleName(100, gl.yres-180);
 
-	    showTinaPicture(250, gl.yres-100, gl.tinaTexture);
+	    showAnahiPicture(250, gl.yres-100, gl.tinaTexture);
 	    showFranciscoPicture(250, gl.yres-200, gl.dogTexture);
 	    showTheodorePicture(250, gl.yres-300, gl.mariogm734Texture);
 	    showAriellePic(250, gl.yres-400, gl.animeTexture);
