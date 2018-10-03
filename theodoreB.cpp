@@ -2,6 +2,7 @@
 //Modified by: Theodore Barcelona
 //Updated: 10/2/18
 //Theo's game source code
+#include <math.h>
 #include <GL/glx.h>
 #include "fonts.h"
 
@@ -9,7 +10,7 @@ extern void showTheodoreName(int x, int y)
 {
     //show name and position
     Rect r;
-    r.bot = y - 150;
+    r.bot = y - 0;
     r.left = x + 280;
     r.center = 1;
     ggprint8b(&r, 40, 0x00ffff44, "Theodore Barcelona");
