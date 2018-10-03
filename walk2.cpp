@@ -812,10 +812,10 @@ void render(void)
 	    showTheodoreName(100, gl.yres-90);
 	    ShowArielleName(100, gl.yres-180);
 
-	    showAnahiPicture(250, gl.yres-400, gl.tinaTexture);
-	    showFranciscoPicture(250, gl.yres-300, gl.dogTexture);
+	    showAnahiPicture(250, gl.yres-550, gl.tinaTexture);
+	    showFranciscoPicture(250, gl.yres-400, gl.dogTexture);
 	    showTheodorePicture(250, gl.yres-100, gl.mariogm734Texture);
-	    showAriellePic(250, gl.yres-200, gl.animeTexture);
+	    showAriellePic(250, gl.yres-250, gl.animeTexture);
 
 	    return;
 	}
