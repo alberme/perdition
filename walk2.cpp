@@ -347,10 +347,10 @@ Image img[7] = {
 "./images/walk.gif",
 "./images/exp.png",
 "./images/exp44.png",
-"./images/tina.png",
 "./images/mariogm734.png",
 "./images/anime.png",
-"./images/dog.png"};
+"./images/dog.png",
+"./images/tina.png"};
 
 
 int main(void)
@@ -405,69 +405,66 @@ unsigned char *buildAlphaData(Image *img)
 
 void initOpengl(void)
 {
-	//OpenGL initialization
-	glGenTextures(1, &gl.tinaTexture);
 	//-------------------------------------------------------------------------
-   	//tina texture
-	//
-	int w_tina = img[3].width;
-	int h_tina  = img[3].height;
-	//
-	glBindTexture(GL_TEXTURE_2D, gl.tinaTexture);
-	//
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, w_tina, h_tina, 0,
-		GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
-	//-------------------------------------------------------------------------
-	//
         glGenTextures(1, &gl.mariogm734Texture);
         //-------------------------------------------------------------------------
         //mario texture
         //
-        int w_mario = img[4].width;
-        int h_mario = img[4].height;
+        int w_mario = img[3].width;
+        int h_mario = img[3].height;
         //
         glBindTexture(GL_TEXTURE_2D, gl.mariogm734Texture);
         //
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, 3, w_mario, h_mario, 0,
-                GL_RGB, GL_UNSIGNED_BYTE, img[4].data);
+                GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
         //-------------------------------------------------------------------------
         //
   	glGenTextures(1, &gl.animeTexture);
         //-------------------------------------------------------------------------
-        //tina texture
+        //anime texture
         //
-        int w_anime = img[5].width;
-        int h_anime = img[5].height;
+        int w_anime = img[4].width;
+        int h_anime = img[4].height;
         //
         glBindTexture(GL_TEXTURE_2D, gl.animeTexture);
         //
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, 3, w_anime, h_anime, 0,
-                GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
+                GL_RGB, GL_UNSIGNED_BYTE, img[4].data);
         //-------------------------------------------------------------------------
         //
   	glGenTextures(1, &gl.dogTexture);
         //-------------------------------------------------------------------------
         //dog texture
         //
-        int w_dog = img[6].width;
-        int h_dog = img[6].height;
+        int w_dog = img[5].width;
+        int h_dog = img[5].height;
         //
         glBindTexture(GL_TEXTURE_2D, gl.dogTexture);
         //
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, 3, w_dog, h_dog, 0,
-                GL_RGB, GL_UNSIGNED_BYTE, img[6].data);
+                GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
         //-------------------------------------------------------------------------
-        //
-
-
+	//OpenGL initialization
+	glGenTextures(1, &gl.tinaTexture);
+	//-------------------------------------------------------------------------
+   	//tina texture
+	//
+	int w_tina = img[6].width;
+	int h_tina  = img[6].height;
+	//
+	glBindTexture(GL_TEXTURE_2D, gl.tinaTexture);
+	//
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w_tina, h_tina, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, img[6].data);
+	//-------------------------------------------------------------------------
 	glViewport(0, 0, gl.xres, gl.yres);
 	//Initialize matrices
 	glMatrixMode(GL_PROJECTION); glLoadIdentity();
