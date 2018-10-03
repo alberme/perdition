@@ -13,7 +13,7 @@ extern void showAnahiName(int x, int y)
     ggprint8b(&r, 40, 0x00ffff44, "Anahi Vargas");
 
 }
-void showTinaPicture(int x, int y, GLuint texid)
+void showAnahiPicture(int x, int y, GLuint texid)
 {
     float fx = (float)x;
     float fy  = (float)y;
