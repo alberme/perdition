@@ -17,10 +17,14 @@ void ShowArielleName(int x, int y)
 
 void showAriellePic(int x, int y, GLuint texid)
 {
+    static float angle2 = 0.0f;
+
 	glColor3ub(225, 255, 255);
 	int wid = 40;
 	glPushMatrix();
 	glTranslated(x, y, 0);
+	glRotatef(angle2, 0.0f, 0.0f, 1.0f);
+	angle2 += 1;
 	glBindTexture(GL_TEXTURE_2D, texid);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid, -wid);
