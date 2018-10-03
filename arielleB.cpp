@@ -23,8 +23,8 @@ void showAriellePic(int x, int y, GLuint texid)
 	int wid = 40;
 	glPushMatrix();
 	glTranslated(x, y, 0);
-	glRotatef(angle2, 0.0f, 0.0f, 1.0f);
-	angle2 += 1;
+	glRotatef(angle2, 0.0f, 0.0f, 1.0f);	//rotates the picture
+	angle2 += 1;	//the speed of the picture
 	glBindTexture(GL_TEXTURE_2D, texid);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid, -wid);
