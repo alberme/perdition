@@ -114,7 +114,7 @@ public:
 	GLuint mariogm734Texture;
 	GLuint tinaTexture;
 	GLuint animeTexture;
-	GLuint dogTexture;
+	GLuint jeremyTexture;
 	Vec box[20];
 	Sprite exp;
 	Sprite exp44;
@@ -349,7 +349,7 @@ Image img[7] = {
 "./images/exp44.png",
 "./images/mariogm734.png",
 "./images/anime.png",
-"./images/dog.png",
+"./images/jeremy.gif",
 "./images/tina.png"};
 
 
@@ -436,18 +436,18 @@ void initOpengl(void)
                 GL_RGB, GL_UNSIGNED_BYTE, img[4].data);
         //-------------------------------------------------------------------------
         //
-  	glGenTextures(1, &gl.dogTexture);
+  	glGenTextures(1, &gl.jeremyTexture);
         //-------------------------------------------------------------------------
-        //dog texture
+        //jeremy texture
         //
-        int w_dog = img[5].width;
-        int h_dog = img[5].height;
+        int w_jeremy = img[5].width;
+        int h_jeremy = img[5].height;
         //
-        glBindTexture(GL_TEXTURE_2D, gl.dogTexture);
+        glBindTexture(GL_TEXTURE_2D, gl.jeremyTexture);
         //
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-        glTexImage2D(GL_TEXTURE_2D, 0, 3, w_dog, h_dog, 0,
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, w_jeremy, h_jeremy, 0,
                 GL_RGB, GL_UNSIGNED_BYTE, img[5].data);
         //-------------------------------------------------------------------------
 	//OpenGL initialization
@@ -813,7 +813,7 @@ void render(void)
 	    ShowArielleName(100, gl.yres-135);
 
 	    showAnahiPicture(250, gl.yres-475, gl.tinaTexture);
-	    showFranciscoPicture(250, gl.yres-350, gl.dogTexture);
+	    showFranciscoPicture(250, gl.yres-350, gl.jeremyTexture);
 	    showTheodorePicture(250, gl.yres-100, gl.mariogm734Texture);
 	    showAriellePic(250, gl.yres-220, gl.animeTexture);
 
