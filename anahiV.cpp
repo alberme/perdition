@@ -1,11 +1,11 @@
 // modified by: Anahi Vargas
-// date: 10/2/2018
+// date: 10/7/2018
 #include "fonts.h"
 #include <GL/glx.h>
 using namespace std;
 
 Rect r;
-
+//show credit name
 void showAnahiName(int x, int y)
 {
     r.bot = y - 300;
@@ -14,6 +14,7 @@ void showAnahiName(int x, int y)
     ggprint8b(&r, 40, 0x00ffff44, "Anahi Vargas");
 }
 
+//show credit picture
 void showAnahiPicture(int x, int y, GLuint texid)
 {
     float fx = (float)x;
@@ -35,6 +36,7 @@ void showAnahiPicture(int x, int y, GLuint texid)
     glPopMatrix();
 }
 
+//show settings icon top right
 void showSettingsIcon(int x, int y, GLuint texid)
 {
     float fx = (float)x;
@@ -62,14 +64,17 @@ void showSettingsIcon(int x, int y, GLuint texid)
     glPopMatrix();
 }
 
+//show settings options
 void showSettings(int x, int y)
 {
     r.bot = y - 30;
     r.left = x + 20;
     r.center = 0;
-    ggprint8b(&r, 16, 0x00ffff44, "Help");
-    ggprint8b(&r, 16, 0x00ffff44, "Credits");
+    ggprint8b(&r, 16, 0x00ffff44, "C - Credits");
+    ggprint8b(&r, 16, 0x00ffff44, "H - Help");
 }
+
+//show game control keys
 void showHelp(int x, int y)
 {
 	for (int i = 0; i < 7; i++) {
