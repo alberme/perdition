@@ -108,7 +108,6 @@ public:
 	int jump;		//added for jump w/spacebar arielle
 	int credits;
 	int walkFrame;
-	int helpTab;
 	double delay;
 	Image *walkImage;
 	GLuint walkTexture;
@@ -116,7 +115,6 @@ public:
 	GLuint tinaTexture;
 	GLuint animeTexture;
 	GLuint jeremyTexture;
-	GLuint cactusTexture;
 	Vec box[20];
 	Sprite exp;
 	Sprite exp44;
@@ -345,15 +343,14 @@ public:
 			unlink(ppmname);
 	}
 };
-Image img[8] = {
+Image img[7] = {
 "./images/walk.gif",
 "./images/exp.png",
 "./images/exp44.png",
 "./images/mariogm734.png",
 "./images/anime.png",
 "./images/jeremy.gif",
-"./images/tina.png",
-"./images/cactus.png"};
+"./images/tina.png"};
 
 
 int main(void)
@@ -469,21 +466,6 @@ void initOpengl(void)
 		GL_RGB, GL_UNSIGNED_BYTE, img[6].data);
 	//-------------------------------------------------------------------------
 
-	//helpTab
-	//cactus texture
-        //
-	glGenTextures(1, &gl.cactusTexture);
-        
-        int w_cactus = img[7].width;
-        int h_cactus = img[7].height;
-        
-        glBindTexture(GL_TEXTURE_2D, gl.cactusTexture);
-        
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-        glTexImage2D(GL_TEXTURE_2D, 0, 3, w_cactus, h_cactus, 0,
-                GL_RGB, GL_UNSIGNED_BYTE, img[7].data);
-	//-------------------------------------------------------------------------
 
 	glViewport(0, 0, gl.xres, gl.yres);
 	//Initialize matrices
@@ -694,9 +676,6 @@ int checkKeys(XEvent *e)
 			break;
 		case XK_c:
 			gl.credits ^=1;
-			break;
-		case XK_h:
-			gl.helpTab ^=1;
 			break;	
 	}
 	return 0;
@@ -843,16 +822,7 @@ void render(void)
 	    return;
 	}
 
-	if (gl.helpTab) {
-	    extern void showHelpTab(int x, int y, GLuint texid);
-	    extern void showHelpText(int x, int y);
-	    showHelpTab(250, 475, gl.cactusTexture);
-	    showHelpText(450, 450); 
-	    return;
-	}
-
 	
-
 	float cx = gl.xres/2.0;
 	float cy = gl.yres/2.0;
 	//
@@ -1053,7 +1023,6 @@ void render(void)
 	ggprint8b(&r, 16, c, "+   	faster");
 	ggprint8b(&r, 16, c, "-   	slower");
 	ggprint8b(&r, 16, c, "C    	Credits");
-	ggprint8b(&r, 16, c, "H    	Help/Info");
 	ggprint8b(&r, 16, c, "frame: %i", gl.walkFrame);
 	if (gl.movie) {
 		screenCapture();
