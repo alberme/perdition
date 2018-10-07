@@ -108,6 +108,8 @@ public:
 	int jump;		//added for jump w/spacebar arielle
 	int credits;
 	int walkFrame;
+	int settings;
+	int helpTab;
 	double delay;
 	Image *walkImage;
 	GLuint walkTexture;
@@ -115,6 +117,8 @@ public:
 	GLuint tinaTexture;
 	GLuint animeTexture;
 	GLuint jeremyTexture;
+	GLuint cactusTexture;
+	GLuint settings_icon_Texture;
 	Vec box[20];
 	Sprite exp;
 	Sprite exp44;
@@ -135,6 +139,7 @@ public:
 		walk=0;
 		jump = 0;		//added  for jump arielle
 		credits =0;
+		settings = 0;
 		walkFrame=0;
 		walkImage=NULL;
 		MakeVector(ball_pos, 520.0, 0, 0);
@@ -343,14 +348,16 @@ public:
 			unlink(ppmname);
 	}
 };
-Image img[7] = {
+Image img[9] = {
 "./images/walk.gif",
 "./images/exp.png",
 "./images/exp44.png",
 "./images/mariogm734.png",
 "./images/anime.png",
 "./images/jeremy.gif",
-"./images/tina.png"};
+"./images/tina.png",
+"./images/cactus.png",
+"./images/settings_icon.png"};
 
 
 int main(void)
@@ -466,6 +473,35 @@ void initOpengl(void)
 		GL_RGB, GL_UNSIGNED_BYTE, img[6].data);
 	//-------------------------------------------------------------------------
 
+	//helpTab
+	//cactus texture
+        //
+	glGenTextures(1, &gl.cactusTexture);
+        
+        int w_cactus = img[7].width;
+        int h_cactus = img[7].height;
+        
+        glBindTexture(GL_TEXTURE_2D, gl.cactusTexture);
+        
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, w_cactus, h_cactus, 0,
+                GL_RGB, GL_UNSIGNED_BYTE, img[7].data);
+	//-------------------------------------------------------------------------
+	glGenTextures(1, &gl.settings_icon_Texture);
+	//-------------------------------------------------------------------------
+   	//settings icon texture
+	//
+	int w_settings_icon = img[8].width;
+	int h_settings_icon  = img[8].height;
+	//
+	glBindTexture(GL_TEXTURE_2D, gl.settings_icon_Texture);
+	//
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w_settings_icon, h_settings_icon, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, img[8].data);
+	//-------------------------------------------------------------------------
 
 	glViewport(0, 0, gl.xres, gl.yres);
 	//Initialize matrices
@@ -674,8 +710,14 @@ int checkKeys(XEvent *e)
 		case XK_Escape:
 			return 1;
 			break;
+		case XK_o:
+			gl.settings ^= 1;
+			break;
 		case XK_c:
-			gl.credits ^=1;
+			gl.credits ^= 1;
+			break;
+		case XK_h:
+			gl.helpTab ^= 1;
 			break;	
 	}
 	return 0;
@@ -800,20 +842,24 @@ void render(void)
 	glClearColor(0.1, 0.1, 0.1, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	if (gl.credits) {
+		
+		//display names
 	    extern void showFranciscoName(int x, int y);
 	    extern void showAnahiName(int x, int y);
 	    extern void showTheodoreName(int x, int y);
 	    extern void ShowArielleName(int x, int y);
-	    //displays images
+	    
+		showFranciscoName(100, gl.yres-155);
+	    showAnahiName(100, gl.yres-175);
+	    showTheodoreName(100, gl.yres-105);
+	    ShowArielleName(100, gl.yres-135);
+		
+		//displays images
 	    extern void showAnahiPicture(int x, int y, GLuint texid);
 	    extern void showFranciscoPicture(int x, int y, GLuint texid);
 	    extern void showTheodorePicture(int x, int y, GLuint texid);
 	    extern void showAriellePic(int x, int y, GLuint texid);
-	    showFranciscoName(100, gl.yres-155);
-	    showAnahiName(100, gl.yres-175);
-	    showTheodoreName(100, gl.yres-105);
-	    ShowArielleName(100, gl.yres-135);
-
+	    
 	    showAnahiPicture(250, gl.yres-475, gl.tinaTexture);
 	    showFranciscoPicture(250, gl.yres-350, gl.jeremyTexture);
 	    showTheodorePicture(250, gl.yres-100, gl.mariogm734Texture);
@@ -821,8 +867,30 @@ void render(void)
 
 	    return;
 	}
+	
+	// show settings icon top right
+    extern void showSettingsIcon(int x, int y, GLuint texid);
+    showSettingsIcon(gl.xres-30, gl.yres-30, gl.settings_icon_Texture);
+
+    //display settings
+    if (gl.settings) {
+        extern void showSettings(int x, int y);
+        showSettings(100, gl.yres-100);
+        return;
+    }
+
+	if (gl.helpTab) {
+	    extern void showHelpTab(int x, int y, GLuint texid);
+	    extern void showHelpText(int x, int y);
+		extern void showHelp(int x, int y);
+	    showHelpTab(250, 475, gl.cactusTexture);
+	    showHelpText(450, 450); 
+		showHelp(50, gl.yres-60);
+	    return;
+	}
 
 	
+
 	float cx = gl.xres/2.0;
 	float cy = gl.yres/2.0;
 	//
@@ -1011,19 +1079,12 @@ void render(void)
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glDisable(GL_ALPHA_TEST);
 	}
-	unsigned int c = 0x00ffff44;
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
-	ggprint8b(&r, 16, c, "Spacebar	jump");
-	ggprint8b(&r, 16, c, "W   	Walk cycle");
-	ggprint8b(&r, 16, c, "D   	walk right");
-	ggprint8b(&r, 16, c, "A   	walk left");
-	ggprint8b(&r, 16, c, "E   	Explosion");
-	ggprint8b(&r, 16, c, "+   	faster");
-	ggprint8b(&r, 16, c, "-   	slower");
-	ggprint8b(&r, 16, c, "C    	Credits");
-	ggprint8b(&r, 16, c, "frame: %i", gl.walkFrame);
+	ggprint8b(&r, 16, 0x00ffff44, "C    	Credits");
+	ggprint8b(&r, 16, 0x00ffff44, "H    	Help/Info");
+	ggprint8b(&r, 16, 0x00ffff44, "O    	Settings");
 	if (gl.movie) {
 		screenCapture();
 	}
