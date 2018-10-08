@@ -7,7 +7,7 @@
 #include <GL/glx.h>
 #include "fonts.h"
 
-extern void showTheodoreName(int x, int y)
+void showTheodoreName(int x, int y)
 {
     //show name and position
     Rect r;
