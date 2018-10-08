@@ -1,5 +1,6 @@
-//Credits Function & My Sourcefile
+//Credits Function & My Sourcefile for Game Project: Perdition
 //By: Theodore Barcelona
+//Group #: 2
 //Updated: 10/8/18
 //Theo's game source code
 //Description: show name/picture in credits
