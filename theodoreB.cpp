@@ -1,7 +1,8 @@
-//Credits Function: show name & picture
-//Modified by: Theodore Barcelona
-//Updated: 10/2/18
+//Credits Function & My Sourcefile
+//By: Theodore Barcelona
+//Updated: 10/8/18
 //Theo's game source code
+//Description: show name/picture in credits
 #include <math.h>
 #include <GL/glx.h>
 #include "fonts.h"
@@ -31,6 +32,6 @@ void showTheodorePicture(int x, int y, GLuint texid)
          glTexCoord2f(1.0f, 0.0f); glVertex2i(-wid, wid);
          glTexCoord2f(1.0f, 1.0f); glVertex2i( wid, wid);
          glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
-         glEnd();
-         glPopMatrix();
+    glEnd();
+    glPopMatrix();
 }
