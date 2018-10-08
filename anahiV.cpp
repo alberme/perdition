@@ -1,10 +1,10 @@
-// modified by: Anahi Vargas
+// author: Anahi Vargas
 // date: 10/7/2018
 #include "fonts.h"
 #include <GL/glx.h>
-using namespace std;
 
 Rect r;
+
 //show credit name
 void showAnahiName(int x, int y)
 {
