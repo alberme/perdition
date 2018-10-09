@@ -117,7 +117,6 @@ public:
 	GLuint tinaTexture;
 	GLuint animeTexture;
 	GLuint jeremyTexture;
-	GLuint cactusTexture;
 	GLuint settings_icon_Texture;
 	Vec box[20];
 	Sprite exp;
@@ -473,20 +472,6 @@ void initOpengl(void)
 		GL_RGB, GL_UNSIGNED_BYTE, img[6].data);
 	//-------------------------------------------------------------------------
 
-	//helpTab
-	//cactus texture
-        //
-	glGenTextures(1, &gl.cactusTexture);
-        
-        int w_cactus = img[7].width;
-        int h_cactus = img[7].height;
-        
-        glBindTexture(GL_TEXTURE_2D, gl.cactusTexture);
-        
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-        glTexImage2D(GL_TEXTURE_2D, 0, 3, w_cactus, h_cactus, 0,
-                GL_RGB, GL_UNSIGNED_BYTE, img[7].data);
 	//-------------------------------------------------------------------------
 	glGenTextures(1, &gl.settings_icon_Texture);
 	//-------------------------------------------------------------------------
@@ -880,11 +865,7 @@ void render(void)
     }
 
 	if (gl.helpTab) {
-	    extern void showHelpTab(int x, int y, GLuint texid);
-	    extern void showHelpText(int x, int y);
-		extern void showHelp(int x, int y);
-	    showHelpTab(250, 475, gl.cactusTexture);
-	    showHelpText(450, 450); 
+		extern void showHelp(int x, int y); 
 		showHelp(50, gl.yres-60);
 	    return;
 	}
