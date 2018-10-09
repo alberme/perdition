@@ -347,7 +347,7 @@ public:
 			unlink(ppmname);
 	}
 };
-Image img[9] = {
+Image img[8] = {
 "./images/walk.gif",
 "./images/exp.png",
 "./images/exp44.png",
@@ -355,7 +355,6 @@ Image img[9] = {
 "./images/anime.png",
 "./images/jeremy.gif",
 "./images/tina.png",
-"./images/cactus.png",
 "./images/settings_icon.png"};
 
 
@@ -477,15 +476,15 @@ void initOpengl(void)
 	//-------------------------------------------------------------------------
    	//settings icon texture
 	//
-	int w_settings_icon = img[8].width;
-	int h_settings_icon  = img[8].height;
+	int w_settings_icon = img[7].width;
+	int h_settings_icon  = img[7].height;
 	//
 	glBindTexture(GL_TEXTURE_2D, gl.settings_icon_Texture);
 	//
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w_settings_icon, h_settings_icon, 0,
-		GL_RGB, GL_UNSIGNED_BYTE, img[8].data);
+		GL_RGB, GL_UNSIGNED_BYTE, img[7].data);
 	//-------------------------------------------------------------------------
 
 	glViewport(0, 0, gl.xres, gl.yres);
