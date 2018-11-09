@@ -30,6 +30,13 @@
 typedef double Flt;
 typedef double Vec[3];
 typedef Flt	Matrix[4][4];
+typedef struct t_mouse {
+	int eventType;
+	int lbutton;
+	int rbutton;
+	int x;
+	int y;
+} Mouse;
 
 //macros
 #define rnd() (((double)rand())/(double)RAND_MAX)
@@ -110,6 +117,7 @@ public:
 	int walkFrame;
 	int settings;
 	int helpTab;
+    int menu;
 	double delay;
 	Image *walkImage;
 	GLuint walkTexture;
@@ -125,6 +133,7 @@ public:
 	Vec ball_vel;
 	//camera is centered at (0,0) lower-left of screen. 
 	Flt camera[2];
+	Mouse mouse;
 	~Global() {
 		logClose();
 	}
@@ -139,6 +148,7 @@ public:
 		jump = 0;		//added  for jump arielle
 		credits =0;
 		settings = 0;
+		menu = 1; 		// start up with main menu
 		walkFrame=0;
 		walkImage=NULL;
 		MakeVector(ball_pos, 520.0, 0, 0);
@@ -158,7 +168,6 @@ public:
 			box[i][2] = 0.0;
 		}
 		memset(keys, 0, 65536);
-		//
 	}
 } gl;
 
@@ -575,21 +584,33 @@ void checkMouse(XEvent *e)
 			e->type != MotionNotify)
 		return;
 	if (e->type == ButtonRelease) {
-		return;
+		if (e->xbutton.button == 1) {
+			//Left button is up
+			gl.mouse.lbutton = 0;
+		}
+		if (e->xbutton.button == 3) {
+			//Right button is up
+			gl.mouse.rbutton = 0;
+		}
+		gl.mouse.eventType = ButtonRelease;
 	}
 	if (e->type == ButtonPress) {
-		if (e->xbutton.button==1) {
+		if (e->xbutton.button == 1) {
 			//Left button is down
+			gl.mouse.lbutton = 1;
 		}
-		if (e->xbutton.button==3) {
+		if (e->xbutton.button == 3) {
 			//Right button is down
+			gl.mouse.rbutton = 1;
 		}
+		gl.mouse.eventType = ButtonPress;
 	}
 	if (e->type == MotionNotify) {
 		if (savex != e->xbutton.x || savey != e->xbutton.y) {
 			//Mouse moved
-			savex = e->xbutton.x;
-			savey = e->xbutton.y;
+			gl.mouse.x = savex = e->xbutton.x;
+			gl.mouse.y = savey = e->xbutton.y;
+			gl.mouse.eventType = MotionNotify;
 		}
 	}
 }
@@ -702,7 +723,7 @@ int checkKeys(XEvent *e)
 			break;
 		case XK_h:
 			gl.helpTab ^= 1;
-			break;	
+			break;
 	}
 	return 0;
 }
@@ -847,12 +868,12 @@ void render(void)
 	    showAnahiPicture(250, gl.yres-475, gl.tinaTexture);
 	    showFranciscoPicture(250, gl.yres-350, gl.jeremyTexture);
 	    showTheodorePicture(250, gl.yres-100, gl.mariogm734Texture);
-	    showAriellePic(250, gl.yres-220, gl.animeTexture);
+        showAriellePic(250, gl.yres-220, gl.animeTexture);
 
-	    return;
-	}
-	
-	// show settings icon top right
+        return;
+    }
+
+    //show settings icon top right
     extern void showSettingsIcon(int x, int y, GLuint texid);
     showSettingsIcon(gl.xres-30, gl.yres-30, gl.settings_icon_Texture);
 
@@ -863,17 +884,22 @@ void render(void)
         return;
     }
 
-	if (gl.helpTab) {
-		extern void showHelp(int x, int y); 
-		showHelp(50, gl.yres-60);
-	    return;
-	}
-
-	
+    if (gl.helpTab) {
+        extern void showHelp(int x, int y); 
+        showHelp(50, gl.yres-60);
+        return;
+    }
+    
+    //show menu screen, rename to mainMenu
+    if (gl.menu) {
+        extern void showMenu(const Mouse);
+        showMenu(gl.mouse);
+        return;
+    }
 
 	float cx = gl.xres/2.0;
 	float cy = gl.yres/2.0;
-	//
+	
 	//show ground
 	glBegin(GL_QUADS);
 		glColor3f(0.2, 0.2, 0.2);
