@@ -23,95 +23,56 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <GL/glx.h>
+
 #include "log.h"
 //#include "ppm.h"
 #include "fonts.h"
+#include "globalTypes.h"
 
 using namespace std;
-//defined types
-typedef double Flt;
-typedef double Vec[3];
-typedef Flt	Matrix[4][4];
 
-//macros
-#define rnd() (((double)rand())/(double)RAND_MAX)
-#define random(a) (rand()%a)
-#define MakeVector(v, x, y, z) (v)[0]=(x),(v)[1]=(y),(v)[2]=(z)
-#define VecCopy(a,b) (b)[0]=(a)[0];(b)[1]=(a)[1];(b)[2]=(a)[2]
-#define VecDot(a,b)	((a)[0]*(b)[0]+(a)[1]*(b)[1]+(a)[2]*(b)[2])
-#define VecSub(a,b,c) (c)[0]=(a)[0]-(b)[0]; \
-			     (c)[1]=(a)[1]-(b)[1]; \
-(c)[2]=(a)[2]-(b)[2]
+/** MACROS **/
+// macro functions are in globalTypes.h
 #define SPACE_BAR 0x20
-#define MENU_ANAHI
+#define ALPHA 1
+//#define MENU_ANAHI
 
-//constants
+/** CONSTANTS **/
 const float timeslice = 1.0f;
 const float gravity = -0.2f;
-#define ALPHA 1
-
-typedef struct t_mouse {
-    int eventType;
-    int lbutton;
-    int rbutton;
-    int x;
-    int y;
-} Mouse;
+const Image img[11] = {
+    "./images/walk.gif",
+    "./images/exp.png",
+    "./images/exp44.png",
+    "./images/mariogm734.png",
+    "./images/anime.png",
+    "./images/jeremy.gif",
+    "./images/tina.png",
+    "./images/cactus.png",
+    "./images/enemy1.png",
+    "./images/goblin.png",
+    "./images/settings_icon.png"};
 
 bool push_start = false;
+
+/** PROTOTYPES **/
 void initOpengl();
 void checkMouse(XEvent *e);
 int checkKeys(XEvent *e);
 void init();
 void physics();
 void render();
+void onWindowResize(XResolution);
 
-//-----------------------------------------------------------------------------
-//Setup timers
-class Timers {
-    public:
-	double physicsRate;
-	double oobillion;
-	struct timespec timeStart, timeEnd, timeCurrent;
-	struct timespec walkTime;
-	Timers() {
-	    physicsRate = 1.0 / 30.0;
-	    oobillion = 1.0 / 1e9;
-	}
-	double timeDiff(struct timespec *start, struct timespec *end) {
-	    return (double)(end->tv_sec - start->tv_sec ) +
-		(double)(end->tv_nsec - start->tv_nsec) * oobillion;
-	}
-	void timeCopy(struct timespec *dest, struct timespec *source) {
-	    memcpy(dest, source, sizeof(struct timespec));
-	}
-	void recordTime(struct timespec *t) {
-	    clock_gettime(CLOCK_REALTIME, t);
-	}
-} timers;
-//-----------------------------------------------------------------------------
+/** GLOBAL OBJECTS **/
 
-class Image;
-
-class Sprite {
-    public:
-	int onoff;
-	int frame;
-	double delay;
-	Vec pos;
-	Image *image;
-	GLuint tex;
-	struct timespec time;
-	Sprite() {
-	    onoff = 0;
-	    frame = 0;
-	    image = NULL;
-	    delay = 0.1;
-	}
-};
-
+/**
+ * left Global here for convenience sake. If you make any changes to
+ * this Global definition, you will also need to apply those changes to
+ * Global.h so that other files that extern Global gl can see those changes too
+ */
 class Global {
-    public:
+public:
 	unsigned char keys[65536];
 	int xres, yres;
 	int movie, movieStep;
@@ -173,213 +134,23 @@ class Global {
             box[i][2] = 0.0;
 	    }
 	    memset(keys, 0, 65536);
-	    //
 	}
 } gl;
 
-class Level {
-    public:
-	unsigned char arr[16][80];
-	int nrows, ncols;
-	int tilesize[2];
-	Flt ftsz[2];
-	Flt tile_base;
-	Level() {
-	    //Log("Level constructor\n");
-	    tilesize[0] = 32;
-	    tilesize[1] = 32;
-	    ftsz[0] = (Flt)tilesize[0];
-	    ftsz[1] = (Flt)tilesize[1];
-	    tile_base = 220.0;
-	    //read level
-	    FILE *fpi = fopen("level1.txt","r");
-	    if (fpi) {
-		nrows=0;
-		char line[100];
-		while (fgets(line, 100, fpi) != NULL) {
-		    removeCrLf(line);
-		    int slen = strlen(line);
-		    ncols = slen;
-		    //Log("line: %s\n", line);
-		    for (int j=0; j<slen; j++) {
-			arr[nrows][j] = line[j];
-		    }
-		    ++nrows;
-		}
-		fclose(fpi);
-		//printf("nrows of background data: %i\n", nrows);
-	    }
-	    for (int i=0; i<nrows; i++) {
-		for (int j=0; j<ncols; j++) {
-		    printf("%c", arr[i][j]);
-		}
-		printf("\n");
-	    }
-	}
-	void removeCrLf(char *str) {
-	    //remove carriage return and linefeed from a Cstring
-	    char *p = str;
-	    while (*p) {
-		if (*p == 10 || *p == 13) {
-		    *p = '\0';
-		    break;
-		}
-		++p;
-	    }
-	}
-} lev;
-
-//X Windows variables
-class X11_wrapper {
-    private:
-	Display *dpy;
-	Window win;
-    public:
-	~X11_wrapper() {
-	    XDestroyWindow(dpy, win);
-	    XCloseDisplay(dpy);
-	}
-	void setTitle() {
-	    //Set the window title bar.
-	    XMapWindow(dpy, win);
-	    XStoreName(dpy, win, "3350 - PERDITION");
-	}
-	void setupScreenRes(const int w, const int h) {
-	    gl.xres = w;
-	    gl.yres = h;
-	}
-	X11_wrapper() {
-	    GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
-	    //GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, None };
-	    XSetWindowAttributes swa;
-	    setupScreenRes(gl.xres, gl.yres);
-	    dpy = XOpenDisplay(NULL);
-	    if (dpy == NULL) {
-		printf("\n\tcannot connect to X server\n\n");
-		exit(EXIT_FAILURE);
-	    }
-	    Window root = DefaultRootWindow(dpy);
-	    XVisualInfo *vi = glXChooseVisual(dpy, 0, att);
-	    if (vi == NULL) {
-		printf("\n\tno appropriate visual found\n\n");
-		exit(EXIT_FAILURE);
-	    } 
-	    Colormap cmap = XCreateColormap(dpy, root, vi->visual, AllocNone);
-	    swa.colormap = cmap;
-	    swa.event_mask = ExposureMask | KeyPressMask | KeyReleaseMask |
-			ButtonPress | ButtonReleaseMask | PointerMotionMask | 
-			StructureNotifyMask | SubstructureNotifyMask;
-	    win = XCreateWindow(dpy, root, 0, 0, gl.xres, gl.yres, 0,
-		    vi->depth, InputOutput, vi->visual,
-		    CWColormap | CWEventMask, &swa);
-	    GLXContext glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
-	    glXMakeCurrent(dpy, win, glc);
-	    setTitle();
-	}
-	void reshapeWindow(int width, int height) {
-	    //window has been resized.
-	    setupScreenRes(width, height);
-	    glViewport(0, 0, (GLint)width, (GLint)height);
-	    glMatrixMode(GL_PROJECTION); glLoadIdentity();
-	    glMatrixMode(GL_MODELVIEW); glLoadIdentity();
-	    glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
-	    setTitle();
-	}
-	void checkResize(XEvent *e) {
-	    //The ConfigureNotify is sent by the
-	    //server if the window is resized.
-	    if (e->type != ConfigureNotify)
-		return;
-	    XConfigureEvent xce = e->xconfigure;
-	    if (xce.width != gl.xres || xce.height != gl.yres) {
-		//Window size did change.
-		reshapeWindow(xce.width, xce.height);
-	    }
-	}
-	bool getXPending() {
-	    return XPending(dpy);
-	}
-	XEvent getXNextEvent() {
-	    XEvent e;
-	    XNextEvent(dpy, &e);
-	    return e;
-	}
-	void swapBuffers() {
-	    glXSwapBuffers(dpy, win);
-	}
-} x11;
-
-class Image {
-    public:
-	int width, height;
-	unsigned char *data;
-	~Image() { delete [] data; }
-	Image(const char *fname) {
-	    if (fname[0] == '\0')
-		return;
-	    //printf("fname **%s**\n", fname);
-	    int ppmFlag = 0;
-	    char name[40];
-	    strcpy(name, fname);
-	    int slen = strlen(name);
-	    char ppmname[80];
-	    if (strncmp(name+(slen-4), ".ppm", 4) == 0)
-		ppmFlag = 1;
-	    if (ppmFlag) {
-		strcpy(ppmname, name);
-	    } else {
-		name[slen-4] = '\0';
-		//printf("name **%s**\n", name);
-		sprintf(ppmname,"%s.ppm", name);
-		//printf("ppmname **%s**\n", ppmname);
-		char ts[100];
-		//system("convert eball.jpg eball.ppm");
-		sprintf(ts, "convert %s %s", fname, ppmname);
-		system(ts);
-	    }
-	    //sprintf(ts, "%s", name);
-	    //printf("read ppm **%s**\n", ppmname); fflush(stdout);
-	    FILE *fpi = fopen(ppmname, "r");
-	    if (fpi) {
-		char line[200];
-		fgets(line, 200, fpi);
-		fgets(line, 200, fpi);
-		//skip comments and blank lines
-		while (line[0] == '#' || strlen(line) < 2)
-		    fgets(line, 200, fpi);
-		sscanf(line, "%i %i", &width, &height);
-		fgets(line, 200, fpi);
-		//get pixel data
-		int n = width * height * 3;			
-		data = new unsigned char[n];			
-		for (int i=0; i<n; i++)
-		    data[i] = fgetc(fpi);
-		fclose(fpi);
-	    } else {
-		printf("ERROR opening image: %s\n",ppmname);
-		exit(0);
-	    }
-	    if (!ppmFlag)
-		unlink(ppmname);
-	}
-};
-Image img[11] = {
-    "./images/walk.gif",
-    "./images/exp.png",
-    "./images/exp44.png",
-    "./images/mariogm734.png",
-    "./images/anime.png",
-    "./images/jeremy.gif",
-    "./images/tina.png",
-    "./images/cactus.png",
-    "./images/enemy1.png",
-    "./images/goblin.png",
-    "./images/settings_icon.png"};
-
+Timers timers;		//Setup timers
+X11_wrapper x11(
+	(GLint[]) { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None },
+	(XResolution) { .xres = gl.xres, .yres = gl.yres },
+	ExposureMask | KeyPressMask | KeyReleaseMask |
+        ButtonPress | ButtonReleaseMask | PointerMotionMask | 
+        StructureNotifyMask | SubstructureNotifyMask,
+	"3350 - PERDITION",
+	onWindowResize
+);	// X Windows variables
+Level lev;
 
 int main(void)
 {
-
     initOpengl();
     init();
     int done = 0;
@@ -397,13 +168,19 @@ int main(void)
 	  }*/
 	physics();
 	render();
-	x11.swapBuffers();
+		x11.swapBuffers();
     }
     cleanup_fonts();
     return 0;
 }
 
-unsigned char *buildAlphaData(Image *img)
+void onWindowResize(XResolution res) {
+	Log("Window resized to %dx%d\n", res.xres, res.yres);
+	gl.xres = res.xres;
+	gl.yres = res.yres;
+}
+
+unsigned char *buildAlphaData(const Image *img)
 {
     //add 4th component to RGB stream...
     int i;
@@ -417,18 +194,18 @@ unsigned char *buildAlphaData(Image *img)
     unsigned char t1 = *(data+1);
     unsigned char t2 = *(data+2);
     for (i=0; i<img->width * img->height * 3; i+=3) {
-	a = *(data+0);
-	b = *(data+1);
-	c = *(data+2);
-	*(ptr+0) = a;
-	*(ptr+1) = b;
-	*(ptr+2) = c;
-	*(ptr+3) = 1;
-	if (a==t0 && b==t1 && c==t2)
-	    *(ptr+3) = 0;
-	//-----------------------------------------------
-	ptr += 4;
-	data += 3;
+		a = *(data+0);
+		b = *(data+1);
+		c = *(data+2);
+		*(ptr+0) = a;
+		*(ptr+1) = b;
+		*(ptr+2) = c;
+		*(ptr+3) = 1;
+		if (a==t0 && b==t1 && c==t2)
+			*(ptr+3) = 0;
+		//-----------------------------------------------
+		ptr += 4;
+		data += 3;
     }
     return newdata;
 }

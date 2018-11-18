@@ -7,6 +7,15 @@
 #include <math.h>
 #include <GL/glx.h>
 #include "fonts.h"
+//Sound that will be implemented later
+//#include <stdio.h>
+//#include <string.h>
+//#include <unistd.h>
+//#include <fcntl.h>
+//#include <sys/stat.h>
+//#ifdef USE_OPENAL_SOUND
+//#include </usr/include/AL/alut.h>
+//#endif
 
 void showTheodoreName(int x, int y)
 {
@@ -36,3 +45,7 @@ void showTheodorePicture(int x, int y, GLuint texid)
     glEnd();
     glPopMatrix();
 }
+//void soundTest(int x,  int y)
+//{
+// Sound will be implemented here.
+//}

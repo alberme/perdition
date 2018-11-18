@@ -1,74 +1,71 @@
 // author: Anahi Vargas
-// date: 10/7/2018
+// date: 11/11/2018
 
 /*** INCLUDE ***/
+#include <GL/glx.h>
+#include <string.h>
+#include <vector>
+#include <iostream>
+
 #include "fonts.h"
 #include "log.h"
-#include <GL/glx.h>
-#include <X11/Xlib.h> // probably dont need this anymore
-#include <string.h>
-#include <map>
+#include "globalTypes.h"
+#include "Global.h"
 
 /*** MACROS ***/
 #define BUTTON_TEXT_COLOR 0x00ffffff
-// possibly define NUM_BUTTONS 3
-#define MakeRGB(v, r, g, b) (v)[0]=(r);(v)[1]=(g);(v)[2]=(b);
+#define IMG_BACKGROUND_PATH "./images/bb.png"
+
+/** GLOBAL **/
+extern Global gl;
 
 /*** FUNCTION PROTOTYPES ***/
 void checkButtons();
 void initMenuButtons();
 
-/*** CONSTANTS ***/
-const char *BUTTON_TEXT[] = { "Play", "Options", "Quit", nullptr };
+// avoids polluting global namespace
+namespace anahi {
+    /*** CONSTANTS ***/
+    // const char *BUTTON_TEXT[] = { "Play", "Options", "Quit", nullptr };
+    // const std::vector<Button> butts {
+    //     { .text = "Play" },
+    //     { .text = "Options" },
+    //     { .text = "Quit" }
+    // };
+    // // add in 
 
+    // use a vector
+    const Button BUTTON_ATTRIBUTES[] = {
+        { .text = "Play" },
+        { .text = "Options" },
+        { .text = "Quit" },
+        nullptr
+    };
 
-// i wanna throw these types into something called globalTypes.h
-/*** TYPES ***/
-typedef struct t_button {
-    // we can also store functions pointers in here
-    Rect r;
-    void (*onClick)();
-    char text[32];
-    int id;
-    int over;   // cursor is over the button
-    int down;   // cursor is holding down on the button
-    int click;  // cursor has stopped holding down inside button perimeter, registering as a button click
-    float color[3];
-    float dcolor[3];
-    unsigned int text_color;
-} Button;
-
-typedef struct t_mouse {
-    // maybe a button state here, buttonrelease, buttonpress
-    int eventType;
-	int lbutton;
-	int rbutton;
-	int x;
-	int y;
-} Mouse;
-
-/*** CLASSES ***/
-class Global {
-public:
-    int initialized;
-    int nbuttons;
-    // std::map<char [], Button> buttonss;
+    /***  ***/
+    int initialized, nbuttons;
+    GLuint backgroundTex;
     Button buttons[3];
-    Global() {
-        nbuttons = 0;
-        initMenuButtons();
-    }
-} g;
+    //std::map<std::string, Button> buttonss;
+}
 
-void initMenuButtons() // i think its better to send an init button construct like a hash table or objects or something
+void initMenu() // consider the struct options
 {   
     Rect rec;
     Button newButton;
+    Image bb(IMG_BACKGROUND_PATH);
     int i = 0;
-    int x = 0;
-    int y = 20;
+    int x = gl.xres / 3;
+    int y = gl.yres / 3;
 
-    while (BUTTON_TEXT[i] != nullptr) {
+    glGenTextures(1, &anahi::backgroundTex);
+    glBindTexture(GL_TEXTURE_2D, anahi::backgroundTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, bb.width, bb.height, 0,
+	    GL_RGB, GL_UNSIGNED_BYTE, bb.data);
+
+    while (anahi::BUTTON_TEXT[i] != nullptr) {
         // dimensions of button
         rec.width = 200;
         rec.height = 50;
@@ -79,8 +76,8 @@ void initMenuButtons() // i think its better to send an init button construct li
         rec.centerx = (rec.left + rec.right) / 2;
         rec.centery = (rec.bot + rec.top) / 2;
 
-        // button attributes and states
-        strcpy(newButton.text, BUTTON_TEXT[i]);
+      // button attributes and states
+        strcpy(newButton.text, anahi::BUTTON_TEXT[i]);
         MakeRGB(newButton.color, 0.4f, 0.4f, 0.7f);
         MakeRGB(newButton.dcolor, newButton.color[0] * 0.5f, 
             newButton.color[1] * 0.5f, 
@@ -92,12 +89,11 @@ void initMenuButtons() // i think its better to send an init button construct li
         newButton.click = 0;
         newButton.text_color = BUTTON_TEXT_COLOR;
 
-        g.buttons[i++] = newButton;
-        g.nbuttons++;
-        x += 20;
+        anahi::buttons[i++] = newButton;
+        anahi::nbuttons++;
+        y += 100;
     }
 }
-
 
 //show credit name
 void showAnahiName(int x, int y)
@@ -198,91 +194,110 @@ void showHelp(int x, int y)
    }
 }
 
-void showMenu(const Mouse mouse) 
+void showMenu()
 {
+    //Log("mouse x: %d, y: %d, lbutt: %d, rbutt: %d\n", gl.mouse.x, gl.mouse.y, gl.mouse.lbutton, gl.mouse.rbutton);
     Rect r;
-
-    // check state of the buttons on screen
-    checkButtons(mouse);
+    
+    if (!anahi::initialized) {
+        Log("initMenu(): Initializing main menu\n");
+        initMenu();
+        anahi::initialized = 1;
+    }
+    checkButtons(); // check state of the buttons on screen
     //draw buttons, highlight the button with mouse cursor over
-    for (int i = 0; i < g.nbuttons; i++) {
-        if (g.buttons[i].over) {
-            //draw a highlight around buttons
+
+    // glPushMatrix();
+    // glTranslatef(, , 0);
+    glBindTexture(GL_TEXTURE_2D, anahi::backgroundTex);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 0.0f); glVertex2i(-gl.xres,  gl.yres);
+        glTexCoord2f(1.0f, 0.0f); glVertex2i( gl.xres,  gl.yres);
+        glTexCoord2f(1.0f, 1.0f); glVertex2i( gl.xres, -gl.yres);
+        glTexCoord2f(0.0f, 1.0f); glVertex2i(-gl.xres, -gl.yres);
+    glEnd();
+    // glPopMatrix();
+    for (int i = 0; i < anahi::nbuttons; i++) {
+        if (anahi::buttons[i].over) {
+            //draw a red highlight around button
             glColor3f(1.0f, 0.0f, 0.0f);
             glLineWidth(2);
             glBegin(GL_LINE_LOOP);
-                glVertex2i(g.buttons[i].r.left-2,  g.buttons[i].r.bot-2);
-                glVertex2i(g.buttons[i].r.left-2,  g.buttons[i].r.top+2);
-                glVertex2i(g.buttons[i].r.right+2, g.buttons[i].r.top+2);
-                glVertex2i(g.buttons[i].r.right+2, g.buttons[i].r.bot-2);
-                glVertex2i(g.buttons[i].r.left-2,  g.buttons[i].r.bot-2);
+                glVertex2i(anahi::buttons[i].r.left-2,  anahi::buttons[i].r.bot-2);
+                glVertex2i(anahi::buttons[i].r.left-2,  anahi::buttons[i].r.top+2);
+                glVertex2i(anahi::buttons[i].r.right+2, anahi::buttons[i].r.top+2);
+                glVertex2i(anahi::buttons[i].r.right+2, anahi::buttons[i].r.bot-2);
+                glVertex2i(anahi::buttons[i].r.left-2,  anahi::buttons[i].r.bot-2);
             glEnd();
             glLineWidth(1);
         }
         // set color for button
-        if (g.buttons[i].down) {
-            glColor3fv(g.buttons[i].dcolor);
+        if (anahi::buttons[i].down) {
+            glColor3fv(anahi::buttons[i].dcolor);
   
         } else {
-            glColor3fv(g.buttons[i].color);
+            glColor3fv(anahi::buttons[i].color);
         }
         // draw a button
         glBegin(GL_QUADS);
-            glVertex2i(g.buttons[i].r.left,  g.buttons[i].r.bot);
-            glVertex2i(g.buttons[i].r.left,  g.buttons[i].r.top);
-            glVertex2i(g.buttons[i].r.right, g.buttons[i].r.top);
-            glVertex2i(g.buttons[i].r.right, g.buttons[i].r.bot);
+            glVertex2i(anahi::buttons[i].r.left,  anahi::buttons[i].r.bot);
+            glVertex2i(anahi::buttons[i].r.left,  anahi::buttons[i].r.top);
+            glVertex2i(anahi::buttons[i].r.right, anahi::buttons[i].r.top);
+            glVertex2i(anahi::buttons[i].r.right, anahi::buttons[i].r.bot);
         glEnd();
 
         // text position
-        r.left = g.buttons[i].r.centerx;
-        r.bot  = g.buttons[i].r.centery-8;
+        r.left = anahi::buttons[i].r.centerx;
+        r.bot  = anahi::buttons[i].r.centery-8;
         r.center = 1;
         // check button state
         // click state means the button is 
-        if (g.buttons[i].down) {
-            ggprint16(&r, 0, g.buttons[i].text_color, "Pressed!");
-            g.buttons[i].onClick();
+        if (anahi::buttons[i].down) {
+            ggprint16(&r, 0, anahi::buttons[i].text_color, "Pressed!");
+        } else if (anahi::buttons[i].click) {
+            // Log("%s button clicked", anahi::buttons[i].); 
+            anahi::buttons[i].onClick();
         } else {
-            ggprint16(&r, 0, g.buttons[i].text_color, g.buttons[i].text);
+            ggprint16(&r, 0, anahi::buttons[i].text_color, anahi::buttons[i].text);
         }
     }
 }
 
+//play button will go here
 void play()
 {
-
+    gl.menu = 0;
 }
 
+//settings button will go here
 void settings()
 {
 
 }
 
+//quit button will go here
 void quit()
 {
 
 }
 
 //checks if mouse cursor is over a button
-void checkButtons(const Mouse mouse) 
-{
-    for (int i = 0; i < g.nbuttons; i++) {
-        g.buttons[i].over = 0;
-        g.buttons[i].down = 0;
-        // check for cursor over button
-        if (mouse.x >= g.buttons[i].r.left &&
-                mouse.x <= g.buttons[i].r.right &&
-                mouse.y >= g.buttons[i].r.bot &&
-                mouse.y <= g.buttons[i].r.top) {
-            g.buttons[i].over = 1;
-            g.buttons[i].down = mouse.lbutton || mouse.rbutton ? 1 : 0;
-            #ifdef VERBOSE
-            Log("button id: %d, down: %d, over: %d", 
-                g.buttons[i].id, g.buttons[i].down, g.buttons[i].over);
-            #endif
-        } // else if cursor up inside button then click = 1;
-    }
-
-   // if left button is down, go ahead and render whatever the button correlates to        
-}
+// void checkButtons() 
+// {
+//     for (int i = 0; i < anahi::nbuttons; i++) {
+//         anahi::buttons[i].over = 0;
+//         anahi::buttons[i].down = 0;
+//         // check for cursor over button
+//         if (gl.mouse.x >= anahi::buttons[i].r.left &&
+//                 gl.mouse.x <= anahi::buttons[i].r.right &&
+//                 gl.mouse.y >= anahi::buttons[i].r.bot &&
+//                 gl.mouse.y <= anahi::buttons[i].r.top) {
+//             anahi::buttons[i].over = 1;
+//             anahi::buttons[i].down = gl.mouse.lbutton || gl.mouse.rbutton ? 1 : 0;
+//             #ifdef VERBOSE
+//             Log("button id: %d, down: %d, over: %d", 
+//                 anahi::buttons[i].id, anahi::buttons[i].down, anahi::buttons[i].over);
+//             #endif
+//         }
+//     }    
+// }

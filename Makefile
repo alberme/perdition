@@ -18,7 +18,7 @@ DFLAGS = -g
 IFLAGS = -I$(INCLUDE_DIR)
 LD_FLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm #-lXrandr
 
-# make will find all files required for building here
+# make will find all source files and dependencies required for building here
 SRC_FILES = $(shell find $(SRC_DIR) -name '*.cpp')
 LIB_FILES = $(shell find $(LIB_DIR) -name '*.a')
 OBJ_FAKE_FILES = $(SRC_FILES:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
@@ -27,7 +27,7 @@ OBJ_NODIR_FILES = $(addprefix $(BUILD_DIR)/,$(notdir $(SRC_FILES:.cpp=.o)))
 # implicit rule for all object files
 $(BUILD_DIR)/%.o: %.cpp
 	@echo "Compiling: $<"
-	@g++ $(CFLAGS) $(IFLAGS) -c $< -o $(BUILD_DIR)/$(notdir $@)
+	@g++ $(CFLAGS) $(DFLAGS) $(IFLAGS) -c $< -o $(BUILD_DIR)/$(notdir $@)
 
 .PHONY: all start walk2 build clean debug checkDirs
 all walk2 $(PROJECT_NAME): start # default rule
