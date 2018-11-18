@@ -29,8 +29,8 @@ $(BUILD_DIR)/%.o: %.cpp
 	@echo "Compiling: $<"
 	@g++ $(CFLAGS) $(IFLAGS) -c $< -o $(BUILD_DIR)/$(notdir $@)
 
-.PHONY: all start walk2 clean debug checkDirs
-all lol walk2: start # default rule
+.PHONY: all start walk2 build clean debug checkDirs
+all walk2 $(PROJECT_NAME): start # default rule
 	@echo Successfully built ./$(PROJECT_NAME)
 
 clean:
@@ -62,9 +62,9 @@ ifneq ($(BUILD_DIR),$(wildcard $(BUILD_DIR)))
 endif
 
 # prerequisites go here before $(PROJECT_NAME)
-start: checkDirs $(PROJECT_NAME)
+start: checkDirs build
 
 # linker
-$(PROJECT_NAME): $(OBJ_FAKE_FILES)
-	@echo "Linking: $@"
-	@g++ $(LD_FLAGS) $(OBJ_NODIR_FILES) $(LIB_FILES) -o $@
+build: $(OBJ_FAKE_FILES)
+	@echo "Linking: $(PROJECT_NAME)"
+	@g++ $(LD_FLAGS) $(OBJ_NODIR_FILES) $(LIB_FILES) -o $(PROJECT_NAME)
