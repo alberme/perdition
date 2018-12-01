@@ -3,6 +3,7 @@
 
 #include <GL/glx.h>
 #include <stdlib.h>
+#include <vector>
 
 #include "fonts.h"
 
@@ -18,7 +19,7 @@
                     (c)[2]=(a)[2]-(b)[2]
 
 /*** ENUMS ***/
-enum class BackgroundType { ImagePath, RGBA };
+// enum class BackgroundType { ImagePath, RGBA };
 
 /*** TYPES ***/
 typedef double Flt;
@@ -36,8 +37,8 @@ typedef struct t_button {
     int over;   // cursor is over the button
     int down;   // cursor is holding down on the button
     int click;  // cursor has stopped holding down inside button perimeter, registering as a button click
-    float color[3];
-    float dcolor[3];
+    float color[4];
+    float dcolor[4];
     unsigned int text_color;
 } Button;
 typedef struct t_mouse {
@@ -49,13 +50,13 @@ typedef struct t_mouse {
 	int y;
 } Mouse;
 typedef struct t_options_background {
-    BackgroundType type;
     float color[4];
-    const char imagePath[];
+    const char *imagePath;
     XResolution res;
 } BackgroundOptions;
 
 /** CLASSES **/
+
 class Image {
 public:
     int width, height;
@@ -66,16 +67,17 @@ public:
 
 class Menu {
 private:
-    Button *buttons;
+    std::vector<Button>& buttons;
     Mouse *mouse;
-    int numButtons;
+    float *color;
+    GLuint textureId;
+    int hasImage;
     void checkButtons();
 public:
     int numButtons;
     bool active;
     Rect rect;
-    GLuint backgroundTex;
-    Menu(Button[], Mouse*, BackgroundOptions);
+    Menu(std::vector<Button>&, Mouse*, BackgroundOptions);
     void render();
 };
 
@@ -133,4 +135,43 @@ public:
     void swapBuffers();
 };
 
+#ifndef NO_GLOBAL_CLASS_H
+/** 
+ * Place any member declaration changes from Global class definition 
+ * in walk2.cpp here
+ */
+class Global {
+public:
+    unsigned char keys[65536];
+    int xres, yres;
+    int movie, movieStep;
+    int walk;
+    int credits;
+    int walkFrame;
+    int settings;
+    int helpTab;
+    int menu;
+    double delay;
+    Image *walkImage;
+    GLuint walkTexture;
+    GLuint mariogm734Texture;
+    GLuint tinaTexture;
+    GLuint animeTexture;
+    GLuint jeremyTexture;
+    GLuint cactusTexture;
+    GLuint enemy1Texture;
+    GLuint goblinTexture;
+    GLuint settings_icon_Texture;
+    Vec box[20];
+    Sprite exp;
+    Sprite exp44;
+    Vec ball_pos;
+    Vec ball_vel;
+    //camera is centered at (0,0) lower-left of screen. 
+    Flt camera[2];
+    Mouse mouse;
+    ~Global();
+    Global();
+};
+#endif // NO_GLOBAL_CLASS_H
 #endif // _GLOBAL_TYPES_H_

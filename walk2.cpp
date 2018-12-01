@@ -27,6 +27,8 @@
 #include "log.h"
 //#include "ppm.h"
 #include "fonts.h"
+#define NO_GLOBAL_CLASS_H /* prevents Global class header from being included
+						preventing redeclaration compilation error */
 #include "globalTypes.h"
 
 using namespace std;
@@ -36,6 +38,10 @@ using namespace std;
 #define SPACE_BAR 0x20
 #define ALPHA 1
 //#define MENU_ANAHI
+#define XWIN_TITLE "3350 - PERDITION"
+#define XWIN_EVENT_MASK ExposureMask | KeyPressMask | KeyReleaseMask |    \
+					ButtonPress | ButtonReleaseMask | PointerMotionMask | \
+					StructureNotifyMask | SubstructureNotifyMask
 
 /** CONSTANTS **/
 const float timeslice = 1.0f;
@@ -67,9 +73,10 @@ void onWindowResize(XResolution);
 /** GLOBAL OBJECTS **/
 
 /**
- * left Global here for convenience sake. If you make any changes to
- * this Global definition, you will also need to apply those changes to
- * Global.h so that other files that extern Global gl can see those changes too
+ * left Global here for convenience sake. If you add, remove, change
+ * member declarations in this Global definition, you will also need to apply
+ * those changes to globalTypes.h so that other files that extern Global gl
+ * can see those changes too
  */
 class Global {
 public:
@@ -140,11 +147,9 @@ public:
 Timers timers;		//Setup timers
 X11_wrapper x11(
 	(GLint[]) { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None },
-	(XResolution) { .xres = gl.xres, .yres = gl.yres },
-	ExposureMask | KeyPressMask | KeyReleaseMask |
-        ButtonPress | ButtonReleaseMask | PointerMotionMask | 
-        StructureNotifyMask | SubstructureNotifyMask,
-	"3350 - PERDITION",
+	(XResolution) { xres: gl.xres, yres: gl.yres },
+	XWIN_EVENT_MASK,
+	XWIN_TITLE,
 	onWindowResize
 );	// X Windows variables
 Level lev;
